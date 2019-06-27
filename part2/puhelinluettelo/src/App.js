@@ -29,7 +29,7 @@ const App = () => {
   };
 
   const filteredContacts = persons.filter(person =>
-    person.name.toLowerCase().includes(filterString)
+    person.name.toLowerCase().includes(filterString.toLowerCase())
   );
 
   const handleNameChange = event => {
