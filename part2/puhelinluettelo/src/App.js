@@ -53,6 +53,7 @@ const App = () => {
         number={newNumber}
         onSubmit={addName}
       />
+      <h2>Numbers</h2>
       <Persons contacts={filteredContacts} />
     </div>
   );
