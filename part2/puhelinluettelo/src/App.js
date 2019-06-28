@@ -28,13 +28,21 @@ const App = () => {
       ) {
         const p = filteredArr[0];
         const updated = { ...p, number: newNumber };
-        personService.update(p, updated).then(returnedPerson => {
-          setPersons(
-            persons.map(p => (returnedPerson.id === p.id ? returnedPerson : p))
-          );
-          setNewName("");
-          setNewNumber("");
-        });
+        personService
+          .update(p, updated)
+          .then(returnedPerson => {
+            setPersons(
+              persons.map(p =>
+                returnedPerson.id === p.id ? returnedPerson : p
+              )
+            );
+            setNewName("");
+            setNewNumber("");
+          })
+          .catch(error => {
+            alert(`the person was already deleted from server`);
+            setPersons(persons.filter(p => p.id !== id));
+          });
       }
     } else {
       const person = {
