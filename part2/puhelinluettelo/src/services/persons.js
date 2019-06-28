@@ -1,5 +1,5 @@
 import axios from "axios";
-const baseURL = "http://localhost:3002/persons";
+const baseURL = "http://localhost:3002/persons/";
 
 const getPersons = () => {
   const request = axios.get(baseURL);
@@ -11,4 +11,15 @@ const postNew = person => {
   return request.then(response => response.data);
 };
 
-export default { getPersons, postNew };
+const deletePerson = person => {
+  console.log("deleting", person);
+  const request = axios.delete(baseURL + person.id);
+  return request.then(response => response.data);
+};
+
+const update = (person, updatedPerson) => {
+  const request = axios.put(baseURL + person.id, updatedPerson);
+  return request.then(response => response.data);
+};
+
+export default { getPersons, postNew, deletePerson, update };

@@ -19,8 +19,23 @@ const App = () => {
 
   const addName = event => {
     event.preventDefault();
-    if (persons.filter(person => person.name === newName).length !== 0) {
-      window.alert(`${newName} is already added to phonebook`);
+    const filteredArr = persons.filter(person => person.name === newName);
+    if (filteredArr.length !== 0) {
+      if (
+        window.confirm(
+          `${newName} is already added to phonebook, do you want to replace the contact with a new number?`
+        )
+      ) {
+        const p = filteredArr[0];
+        const updated = { ...p, number: newNumber };
+        personService.update(p, updated).then(returnedPerson => {
+          setPersons(
+            persons.map(p => (returnedPerson.id === p.id ? returnedPerson : p))
+          );
+          setNewName("");
+          setNewNumber("");
+        });
+      }
     } else {
       const person = {
         id: persons.length + 1,
@@ -32,6 +47,17 @@ const App = () => {
         setNewName("");
         setNewNumber("");
       });
+    }
+  };
+
+  const deletePerson = person => {
+    if (window.confirm(`Are you sure you want to delete ${person.name}?`)) {
+      personService
+        .deletePerson(person)
+        .then(returnedPerson => {
+          setPersons(persons.filter(i => i.name !== person.name));
+        })
+        .catch(err => console.log("error:", err));
     }
   };
 
@@ -63,7 +89,7 @@ const App = () => {
         onSubmit={addName}
       />
       <h2>Numbers</h2>
-      <Persons contacts={filteredContacts} />
+      <Persons contacts={filteredContacts} deletePerson={deletePerson} />
     </div>
   );
 };

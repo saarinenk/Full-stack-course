@@ -1,14 +1,25 @@
 import React from "react";
 
-const Persons = ({ contacts }) => {
+const Persons = ({ contacts, deletePerson }) => {
+  const onDelete = (event, person) => {
+    event.preventDefault();
+    deletePerson(person);
+  };
+
   return (
-    <div>
-      {contacts.map(i => (
-        <p key={i.name + i.number}>
-          {i.name} {i.number}
-        </p>
-      ))}
-    </div>
+    <table>
+      <tbody>
+        {contacts.map(i => (
+          <tr key={i.name + i.number + "row"}>
+            <td key={i.name + i.number + 1}>{i.name}</td>
+            <td key={i.name + i.number + 2}>{i.number}</td>
+            <td key={i.name + i.number + 3}>
+              <button onClick={e => onDelete(e, i)}>delete</button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
   );
 };
 
