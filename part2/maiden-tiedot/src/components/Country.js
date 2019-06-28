@@ -6,9 +6,7 @@ const Country = ({ country }) => {
   const getWeather = location => {
     axios
       .get(
-        "https://api.openweathermap.org/data/2.5/weather?q=" +
-          location +
-          "&APPID=dea560842d3e852a682f3ea93448017a&units=metric"
+        `https://api.openweathermap.org/data/2.5/weather?q=${location}&APPID=dea560842d3e852a682f3ea93448017a&units=metric`
       )
       .then(response => {
         setWeather(response.data);
@@ -52,7 +50,7 @@ const Country = ({ country }) => {
         id="icon"
         src={
           weatherIcon
-            ? "https://openweathermap.org/img/wn/" + weatherIcon + "@2x.png"
+            ? `https://openweathermap.org/img/wn/${weatherIcon}@2x.png`
             : ""
         }
       />
