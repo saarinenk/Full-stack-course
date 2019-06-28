@@ -15,7 +15,7 @@ const Country = ({ country }) => {
 
   useEffect(() => {
     getWeather(country.capital);
-  }, []);
+  }, [country.capital]);
 
   const temp = currWeather.main ? currWeather.main.temp.toFixed(1) : "";
 
@@ -53,6 +53,7 @@ const Country = ({ country }) => {
             ? `https://openweathermap.org/img/wn/${weatherIcon}@2x.png`
             : ""
         }
+        alt={`${country} flag`}
       />
       <p>
         wind: {wind.speed} m/s degree: {wind.direction} &deg;
