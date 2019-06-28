@@ -41,7 +41,7 @@ const App = () => {
           })
           .catch(error => {
             alert(`the person was already deleted from server`);
-            setPersons(persons.filter(p => p.id !== id));
+            setPersons(persons.filter(person => person.id !== p.id));
           });
       }
     } else {
