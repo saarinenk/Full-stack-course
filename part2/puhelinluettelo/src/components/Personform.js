@@ -5,8 +5,8 @@ const Personform = ({ nameChange, numberChange, name, number, onSubmit }) => {
     <form onSubmit={onSubmit}>
       <div>
         <h3>Add a new contact</h3>
-        name: <input value={name} onChange={nameChange} />
-        number: <input value={number} onChange={numberChange} />
+        name: <input value={name} onChange={nameChange} /> number:{" "}
+        <input value={number} onChange={numberChange} />
       </div>
       <div>
         <button type="submit">add</button>
