@@ -19,15 +19,16 @@ const Country = ({ country }) => {
     getWeather(country.capital);
   }, []);
 
-  const temp = currWeather.main ? currWeather.main.temp : "";
+  const temp = currWeather.main ? currWeather.main.temp.toFixed(1) : "";
 
-  const weatherIcon = currWeather.weather ? currWeather.weather.icon : "";
+  const weatherIcon = currWeather.weather ? currWeather.weather[0].icon : "";
 
   const wind = currWeather.wind
-    ? { speed: currWeather.wind.speed, direction: currWeather.wind.deg }
+    ? {
+        speed: currWeather.wind.speed.toFixed(1),
+        direction: currWeather.wind.deg
+      }
     : "";
-
-  console.log(currWeather);
 
   return (
     <div>
@@ -51,13 +52,12 @@ const Country = ({ country }) => {
         id="icon"
         src={
           weatherIcon
-            ? "https://openweathermap.org/img/wn/" + weatherIcon + ".png"
+            ? "https://openweathermap.org/img/wn/" + weatherIcon + "@2x.png"
             : ""
         }
-        alt="weather icon"
       />
       <p>
-        wind: {wind.speed} m/s {wind.direction} &deg;
+        wind: {wind.speed} m/s degree: {wind.direction} &deg;
       </p>
     </div>
   );
