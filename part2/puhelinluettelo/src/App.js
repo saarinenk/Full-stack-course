@@ -12,9 +12,12 @@ const App = () => {
   const [filterString, setNewFilter] = useState("");
 
   useEffect(() => {
-    personService.getPersons().then(initialPersons => {
-      setPersons(initialPersons);
-    });
+    personService
+      .getPersons()
+      .then(initialPersons => {
+        setPersons(initialPersons);
+      })
+      .catch(err => console.log("error:", err));
   }, []);
 
   const addName = event => {
@@ -40,7 +43,7 @@ const App = () => {
             setNewNumber("");
           })
           .catch(error => {
-            alert(`the person was already deleted from server`);
+            alert(`${p.name} isn't yet added to server, try again`);
             setPersons(persons.filter(person => person.id !== p.id));
           });
       }
@@ -50,11 +53,14 @@ const App = () => {
         name: newName,
         number: newNumber
       };
-      personService.postNew(person).then(returnedPerson => {
-        setPersons(persons.concat(returnedPerson));
-        setNewName("");
-        setNewNumber("");
-      });
+      personService
+        .postNew(person)
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson));
+          setNewName("");
+          setNewNumber("");
+        })
+        .catch(err => console.log("error:", err));
     }
   };
 
@@ -65,7 +71,10 @@ const App = () => {
         .then(returnedPerson => {
           setPersons(persons.filter(i => i.name !== person.name));
         })
-        .catch(err => console.log("error:", err));
+        .catch(error => {
+          alert(`${person.name} was already deleted from server`);
+          setPersons(persons.filter(p => p.id !== person.id));
+        });
     }
   };
 
