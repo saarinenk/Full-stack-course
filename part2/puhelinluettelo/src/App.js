@@ -3,6 +3,7 @@ import "./App.css";
 import Personform from "./components/Personform";
 import Persons from "./components/Persons";
 import Filter from "./components/Filter";
+import Notification from "./components/Notification";
 import personService from "./services/persons";
 
 const App = () => {
@@ -10,6 +11,10 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filterString, setNewFilter] = useState("");
+  const [notificationMessage, setNotificationMessage] = useState({
+    message: null,
+    error: false
+  });
 
   useEffect(() => {
     personService
@@ -39,11 +44,24 @@ const App = () => {
                 returnedPerson.id === p.id ? returnedPerson : p
               )
             );
+            setNotificationMessage({
+              message: `${returnedPerson.name} was updated!`,
+              error: false
+            });
+            setTimeout(() => {
+              setNotificationMessage({ message: null, error: false });
+            }, 5000);
             setNewName("");
             setNewNumber("");
           })
           .catch(error => {
-            alert(`${p.name} isn't yet added to server, try again`);
+            setNotificationMessage({
+              message: `${p.name} isn't yet added to server, try again`,
+              error: true
+            });
+            setTimeout(() => {
+              setNotificationMessage({ message: null, error: false });
+            }, 5000);
             setPersons(persons.filter(person => person.id !== p.id));
           });
       }
@@ -57,6 +75,13 @@ const App = () => {
         .postNew(person)
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson));
+          setNotificationMessage({
+            message: `${person.name} was added!`,
+            error: false
+          });
+          setTimeout(() => {
+            setNotificationMessage({ message: null, error: false });
+          }, 5000);
           setNewName("");
           setNewNumber("");
         })
@@ -70,9 +95,22 @@ const App = () => {
         .deletePerson(person)
         .then(returnedPerson => {
           setPersons(persons.filter(i => i.name !== person.name));
+          setNotificationMessage({
+            message: `${person.name} was deleted!`,
+            error: false
+          });
+          setTimeout(() => {
+            setNotificationMessage({ message: null, error: false });
+          }, 5000);
         })
         .catch(error => {
-          alert(`${person.name} was already deleted from server`);
+          setNotificationMessage({
+            message: `${person.name} was already deleted from server`,
+            error: true
+          });
+          setTimeout(() => {
+            setNotificationMessage({ message: null, error: false });
+          }, 5000);
           setPersons(persons.filter(p => p.id !== person.id));
         });
     }
@@ -97,6 +135,10 @@ const App = () => {
   return (
     <div className="App">
       <h2>Phonebook</h2>
+      <Notification
+        message={notificationMessage.message}
+        error={notificationMessage.error}
+      />
       <Filter onChange={handleFilterChange} filter={filterString} />
       <Personform
         nameChange={handleNameChange}
