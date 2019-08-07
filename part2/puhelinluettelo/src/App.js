@@ -28,6 +28,7 @@ const App = () => {
   const addName = event => {
     event.preventDefault();
     const filteredArr = persons.filter(person => person.name === newName);
+    // if name is already in the phonebook
     if (filteredArr.length !== 0) {
       if (
         window.confirm(
@@ -65,6 +66,7 @@ const App = () => {
             setPersons(persons.filter(person => person.id !== p.id));
           });
       }
+      // if the name to be added is not already in the phonebook
     } else {
       const person = {
         id: persons.length + 1,
@@ -85,7 +87,12 @@ const App = () => {
           setNewName("");
           setNewNumber("");
         })
-        .catch(err => console.log("error:", err));
+        .catch(err => {
+          setNotificationMessage({
+            message: `${err.response.data.error}!`,
+            error: true
+          });
+        });
     }
   };
 
