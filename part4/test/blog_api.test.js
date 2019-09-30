@@ -20,6 +20,11 @@ const initialBlogs = [
   }
 ];
 
+const blogsInDB = async () => {
+  const blogs = await Blog.find({});
+  return blogs.map(blog => blog.toJSON());
+};
+
 beforeEach(async () => {
   await Blog.deleteMany({});
 
@@ -96,6 +101,19 @@ test('blogs cannot be posted without title or url', async () => {
     .post('/api/blogs')
     .send(newBlog2)
     .expect(400);
+});
+
+test('blogs can be deleted with id', async () => {
+  const blogsAtStart = await blogsInDB();
+  const blogToDelete = blogsAtStart[0];
+
+  console.log(blogToDelete.id);
+
+  await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+
+  const response = await api.get('/api/blogs');
+
+  expect(response.body.length).toBe(initialBlogs.length - 1);
 });
 
 afterAll(() => {
