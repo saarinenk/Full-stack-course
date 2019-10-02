@@ -2,36 +2,17 @@ const mongoose = require('mongoose');
 const supertest = require('supertest');
 const app = require('../app');
 const Blog = require('../models/blog');
+const helper = require('./test_helper');
 
 const api = supertest(app);
-
-const initialBlogs = [
-  {
-    title: 'Blogi 1',
-    author: 'Keijo Keijola',
-    url: 'https://url.fi/1',
-    likes: 3
-  },
-  {
-    title: 'Blogi 2',
-    author: 'Kaija Kaijala',
-    url: 'https://url.fi/2',
-    likes: 8
-  }
-];
-
-const blogsInDB = async () => {
-  const blogs = await Blog.find({});
-  return blogs.map(blog => blog.toJSON());
-};
 
 beforeEach(async () => {
   await Blog.deleteMany({});
 
-  let blogObject = new Blog(initialBlogs[0]);
+  let blogObject = new Blog(helper.initialBlogs[0]);
   await blogObject.save();
 
-  blogObject = new Blog(initialBlogs[1]);
+  blogObject = new Blog(helper.initialBlogs[1]);
   await blogObject.save();
 });
 
@@ -62,7 +43,7 @@ test('blogs can be added successfully', async () => {
 
   const response = await api.get('/api/blogs');
 
-  expect(response.body.length).toBe(initialBlogs.length + 1);
+  expect(response.body.length).toBe(helper.initialBlogs.length + 1);
 });
 
 test('blogs without likes get 0 likes', async () => {
@@ -104,7 +85,7 @@ test('blogs cannot be posted without title or url', async () => {
 });
 
 test('blogs can be deleted with id', async () => {
-  const blogsAtStart = await blogsInDB();
+  const blogsAtStart = await helper.blogsInDB();
   const blogToDelete = blogsAtStart[0];
 
   console.log(blogToDelete.id);
@@ -113,7 +94,7 @@ test('blogs can be deleted with id', async () => {
 
   const response = await api.get('/api/blogs');
 
-  expect(response.body.length).toBe(initialBlogs.length - 1);
+  expect(response.body.length).toBe(helper.initialBlogs.length - 1);
 });
 
 afterAll(() => {
