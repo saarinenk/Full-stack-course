@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import loginService from './services/login';
 import blogService from './services/blogs';
 import Blog from './components/Blog';
+import BlogForm from './components/BlogForm';
 
 const App = () => {
   const [username, setUsername] = useState('');
@@ -28,6 +29,7 @@ const App = () => {
 
       window.localStorage.setItem('loggedUser', JSON.stringify(user));
 
+      blogService.setToken(user.token);
       setUser(user);
       setUsername('');
       setPassword('');
@@ -78,6 +80,8 @@ const App = () => {
       <div>
         <p>{user.name} logged in</p>
         {blogs && blogs.map(blog => <Blog key={blog.id} blog={blog} />)}
+        <BlogForm user={user} />
+        <br />
         <button onClick={handleLogout}>Log out</button>
       </div>
     );
