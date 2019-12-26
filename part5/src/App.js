@@ -29,8 +29,17 @@ const App = () => {
     }
   }, []);
 
+  const addBlog = newBlog => {
+    console.log(newBlog);
+    setBlogs(blogs.concat(newBlog));
+  };
+
   const updateBlog = newBlog => {
     setBlogs(blogs.map(b => (newBlog.id === b.id ? newBlog : b)));
+  };
+
+  const removeBlog = blogId => {
+    setBlogs(blogs.filter(i => i.id !== blogId));
   };
 
   const handleLogin = async event => {
@@ -68,8 +77,6 @@ const App = () => {
     setBlogs(blogs);
   };
 
-  console.log(blogs.sort((a, b) => b.likes - a.likes));
-
   const userProfile = () => {
     return (
       <div>
@@ -78,12 +85,19 @@ const App = () => {
           blogs
             .sort((a, b) => b.likes - a.likes)
             .map(blog => (
-              <Blog updateBlog={updateBlog} key={blog.id} blog={blog} />
+              <Blog
+                updateBlog={updateBlog}
+                removeBlog={removeBlog}
+                key={blog.id}
+                blog={blog}
+                userId={user.id}
+              />
             ))}
         <Togglable buttonLabel='New blog'>
           <BlogForm
             user={user}
             setNotificationMessage={setNotificationMessage}
+            addBlog={addBlog}
           />
         </Togglable>
         <br />

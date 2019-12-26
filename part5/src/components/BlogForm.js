@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import blogService from '../services/blogs';
 
-const BlogForm = ({ user, setNotificationMessage }) => {
+const BlogForm = ({ user, setNotificationMessage, addBlog }) => {
   const [title, changeTitle] = useState('');
   const [author, changeAuthor] = useState('');
   const [url, changeUrl] = useState('');
@@ -25,6 +25,7 @@ const BlogForm = ({ user, setNotificationMessage }) => {
       setTimeout(() => {
         setNotificationMessage({ message: null, error: false });
       }, 5000);
+      addBlog(blog);
       changeTitle('');
       changeUrl('');
       changeAuthor('');

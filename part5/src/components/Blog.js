@@ -3,16 +3,14 @@ import blogService from '../services/blogs';
 
 import '../App.css';
 
-const Blog = ({ blog, updateBlog }) => {
+const Blog = ({ blog, updateBlog, removeBlog, userId }) => {
   const [open, setOpen] = useState(false);
 
   const toggleOpen = () => {
     setOpen(!open);
   };
 
-  console.log(blog);
-
-  const buttonClick = () => {
+  const addLike = () => {
     const newBlog = {
       ...blog,
       likes: blog.likes + 1
@@ -20,6 +18,13 @@ const Blog = ({ blog, updateBlog }) => {
 
     blogService.update(newBlog);
     updateBlog(newBlog);
+  };
+
+  const remove = () => {
+    if (window.confirm(`Do you want to detele ${blog.title}?`)) {
+      blogService.deleteBlog(blog);
+      removeBlog(blog.id);
+    }
   };
 
   const hide = { display: 'none' };
@@ -35,9 +40,14 @@ const Blog = ({ blog, updateBlog }) => {
         <a href={blog.url}>{blog.url}</a>
         <div className='inline'>
           <p>Likes: {blog.likes}</p>
-          <button onClick={buttonClick}>like</button>
+          <button onClick={addLike}>like</button>
         </div>
         <p>Added by: {blog.user.name}</p>
+        {blog.user.id === userId ? (
+          <button onClick={remove}>Delete blog</button>
+        ) : (
+          ''
+        )}
       </div>
     </div>
   );
