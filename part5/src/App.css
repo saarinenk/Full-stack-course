@@ -17,3 +17,22 @@
 .success {
   color: green;
 }
+
+.blog {
+  border: 1px solid #bcbcbc;
+  border-radius: 5px;
+  margin: 5px 0;
+  padding: 5px 10px;
+}
+
+.blog p {
+  margin: 3px 0;
+}
+
+.inline p {
+  display: inline-block;
+}
+
+.inline button {
+  margin: 0 10px;
+}
