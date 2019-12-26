@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import blogService from '../services/blogs';
 
-const BlogForm = ({ user }) => {
+const BlogForm = ({ user, setNotificationMessage }) => {
   const [title, changeTitle] = useState('');
   const [author, changeAuthor] = useState('');
   const [url, changeUrl] = useState('');
 
-  const onSubmit = async () => {
+  const onSubmit = async e => {
+    e.preventDefault();
     const blog = {
       title: title,
       author: author,
@@ -17,6 +18,13 @@ const BlogForm = ({ user }) => {
 
     try {
       await blogService.create(blog);
+      setNotificationMessage({
+        message: `Blog ${title} by ${author} added`,
+        error: false
+      });
+      setTimeout(() => {
+        setNotificationMessage({ message: null, error: false });
+      }, 5000);
       changeTitle('');
       changeUrl('');
       changeAuthor('');

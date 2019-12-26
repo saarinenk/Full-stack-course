@@ -3,12 +3,19 @@ import loginService from './services/login';
 import blogService from './services/blogs';
 import Blog from './components/Blog';
 import BlogForm from './components/BlogForm';
+import Notification from './components/Notification';
+
+import './App.css';
 
 const App = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null);
   const [blogs, setBlogs] = useState([]);
+  const [notificationMessage, setNotificationMessage] = useState({
+    message: null,
+    error: false
+  });
 
   useEffect(() => {
     getBlogs();
@@ -35,7 +42,13 @@ const App = () => {
       setUsername('');
       setPassword('');
     } catch (exception) {
-      console.log('wrong credentials');
+      setNotificationMessage({
+        message: `wrong username or password, try again!`,
+        error: true
+      });
+      setTimeout(() => {
+        setNotificationMessage({ message: null, error: false });
+      }, 5000);
     }
   };
 
@@ -81,7 +94,7 @@ const App = () => {
       <div>
         <p>{user.name} logged in</p>
         {blogs && blogs.map(blog => <Blog key={blog.id} blog={blog} />)}
-        <BlogForm user={user} />
+        <BlogForm user={user} setNotificationMessage={setNotificationMessage} />
         <br />
         <button onClick={handleLogout}>Log out</button>
       </div>
@@ -91,6 +104,10 @@ const App = () => {
   return (
     <div>
       <h1>Blogs</h1>
+      <Notification
+        message={notificationMessage.message}
+        error={notificationMessage.error}
+      />
       {user ? userProfile() : loginForm()}
     </div>
   );
