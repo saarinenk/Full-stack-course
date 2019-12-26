@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
+import blogService from '../services/blogs';
 
 import '../App.css';
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, updateBlog }) => {
   const [open, setOpen] = useState(false);
 
   const toggleOpen = () => {
@@ -10,6 +11,16 @@ const Blog = ({ blog }) => {
   };
 
   console.log(blog);
+
+  const buttonClick = () => {
+    const newBlog = {
+      ...blog,
+      likes: blog.likes + 1
+    };
+
+    blogService.update(newBlog);
+    updateBlog(newBlog);
+  };
 
   const hide = { display: 'none' };
 
@@ -24,7 +35,7 @@ const Blog = ({ blog }) => {
         <a href={blog.url}>{blog.url}</a>
         <div className='inline'>
           <p>Likes: {blog.likes}</p>
-          <button>like</button>
+          <button onClick={buttonClick}>like</button>
         </div>
         <p>Added by: {blog.user.name}</p>
       </div>

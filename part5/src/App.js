@@ -29,6 +29,10 @@ const App = () => {
     }
   }, []);
 
+  const updateBlog = newBlog => {
+    setBlogs(blogs.map(b => (newBlog.id === b.id ? newBlog : b)));
+  };
+
   const handleLogin = async event => {
     event.preventDefault();
     try {
@@ -64,11 +68,18 @@ const App = () => {
     setBlogs(blogs);
   };
 
+  console.log(blogs.sort((a, b) => b.likes - a.likes));
+
   const userProfile = () => {
     return (
       <div>
         <p>{user.name} logged in</p>
-        {blogs && blogs.map(blog => <Blog key={blog.id} blog={blog} />)}
+        {blogs &&
+          blogs
+            .sort((a, b) => b.likes - a.likes)
+            .map(blog => (
+              <Blog updateBlog={updateBlog} key={blog.id} blog={blog} />
+            ))}
         <Togglable buttonLabel='New blog'>
           <BlogForm
             user={user}
