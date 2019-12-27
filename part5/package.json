@@ -12,7 +12,8 @@
   "scripts": {
     "start": "react-scripts start",
     "watch": "NODE_ENV=development BROWSER=none nodemon index.js",
-    "eslint": "eslint ."
+    "eslint": "eslint .",
+    "test": "react-scripts test"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -31,6 +32,8 @@
   },
   "proxy": "http://localhost:3003",
   "devDependencies": {
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.4.0",
     "eslint-plugin-jest": "^23.1.1",
     "nodemon": "^1.19.4"
   }
