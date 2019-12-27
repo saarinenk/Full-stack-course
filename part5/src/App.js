@@ -3,15 +3,15 @@ import loginService from './services/login';
 import blogService from './services/blogs';
 import Blog from './components/Blog';
 import BlogForm from './components/BlogForm';
-import LoginForm from './components/LoginForm';
 import Notification from './components/Notification';
 import Togglable from './components/Togglable';
+import { useField } from './hooks';
 
 import './App.css';
 
 const App = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, usernameReset] = useField('type');
+  const [password, passwordReset] = useField('password');
   const [user, setUser] = useState(null);
   const [blogs, setBlogs] = useState([]);
   const [notificationMessage, setNotificationMessage] = useState({
@@ -46,16 +46,16 @@ const App = () => {
     event.preventDefault();
     try {
       const user = await loginService.login({
-        username,
-        password
+        username: username.value,
+        password: password.value
       });
 
       window.localStorage.setItem('loggedUser', JSON.stringify(user));
 
       blogService.setToken(user.token);
       setUser(user);
-      setUsername('');
-      setPassword('');
+      usernameReset();
+      passwordReset();
     } catch (exception) {
       setNotificationMessage({
         message: 'wrong username or password, try again!',
@@ -77,6 +77,23 @@ const App = () => {
     setBlogs(blogs);
   };
 
+  const loginForm = () => (
+    <div>
+      <h2>Login</h2>
+      <form onSubmit={handleLogin}>
+        <div>
+          username
+          <input {...username} />
+        </div>
+        <div>
+          password
+          <input {...password} />
+        </div>
+        <button type='submit'>login</button>
+      </form>
+    </div>
+  );
+
   const userProfile = () => {
     return (
       <div>
@@ -88,7 +105,7 @@ const App = () => {
               <Blog
                 updateBlog={updateBlog}
                 removeBlog={removeBlog}
-                key={blog.id}
+                key={blog.id + user.id}
                 blog={blog}
                 userId={user.id}
               />
@@ -113,17 +130,7 @@ const App = () => {
         message={notificationMessage.message}
         error={notificationMessage.error}
       />
-      {user ? (
-        userProfile()
-      ) : (
-        <LoginForm
-          username={username}
-          password={password}
-          handleLogin={handleLogin}
-          handleUsernameChange={({ target }) => setUsername(target.value)}
-          handlePwChange={({ target }) => setPassword(target.value)}
-        />
-      )}
+      {user ? userProfile() : loginForm()}
     </div>
   );
 };
