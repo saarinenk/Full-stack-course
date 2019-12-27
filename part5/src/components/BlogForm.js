@@ -29,8 +29,8 @@ const BlogForm = ({ user, setNotificationMessage, addBlog }) => {
       changeTitle('');
       changeUrl('');
       changeAuthor('');
-    } catch {
-      console.log('error');
+    } catch (error) {
+      console.log('error ', error);
     }
   };
 
