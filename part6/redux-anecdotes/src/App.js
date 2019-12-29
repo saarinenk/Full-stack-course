@@ -11,22 +11,26 @@ const App = props => {
     props.store.dispatch(createAnecdote(content));
   };
 
+  console.log(anecdotes);
+
   return (
     <div>
       <h2>Anecdotes</h2>
-      {anecdotes.map(anecdote => (
-        <div key={anecdote.id + anecdote.votes}>
-          <div>{anecdote.content}</div>
-          <div>
-            has {anecdote.votes}
-            <button
-              onClick={() => props.store.dispatch(voteAnecdote(anecdote.id))}
-            >
-              vote
-            </button>
+      {anecdotes
+        .sort((a, b) => b.votes - a.votes)
+        .map(anecdote => (
+          <div key={anecdote.id + anecdote.votes}>
+            <div>{anecdote.content}</div>
+            <div>
+              has {anecdote.votes}
+              <button
+                onClick={() => props.store.dispatch(voteAnecdote(anecdote.id))}
+              >
+                vote
+              </button>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
       <h2>create new</h2>
       <form onSubmit={newAnecdote}>
         <input name='anecdote' />
