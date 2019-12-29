@@ -1,9 +1,11 @@
-const initialState = 'Random notification here';
+const initialState = {
+  text: null
+};
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case 'SET_NOTIFICATION':
-      return state;
+      return { ...state, text: action.data };
     default:
       return state;
   }
@@ -11,10 +13,8 @@ const reducer = (state = initialState, action) => {
 
 export const setNotification = content => {
   return {
-    type: 'SET_NOTIFICATIONs',
-    data: {
-      content
-    }
+    type: 'SET_NOTIFICATION',
+    data: content
   };
 };
 
