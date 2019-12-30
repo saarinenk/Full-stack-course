@@ -4,43 +4,41 @@ import { setNotification } from '../reducers/notificationReducer';
 import { connect } from 'react-redux';
 
 const AnecdoteList = props => {
-  const anecdotes = props.anecdotes;
-  const filter = props.filter.text;
-
   return (
     <div>
-      {anecdotes
-        .sort((a, b) => b.votes - a.votes)
-        .filter(
-          i => !filter || i.content.toLowerCase().includes(filter.toLowerCase())
-        )
-        .map(anecdote => (
-          <div key={anecdote.id + anecdote.votes}>
-            <div>{anecdote.content}</div>
-            <div>
-              has {anecdote.votes}
-              <button
-                onClick={() => {
-                  props.voteAnecdote(anecdote.id);
-                  props.setNotification('You voted for: ' + anecdote.content);
-                  setTimeout(() => {
-                    props.setNotification(null);
-                  }, 5000);
-                }}
-              >
-                vote
-              </button>
-            </div>
+      {props.anecdotes.map(anecdote => (
+        <div key={anecdote.id + anecdote.votes}>
+          <div>{anecdote.content}</div>
+          <div>
+            has {anecdote.votes}
+            <button
+              onClick={() => {
+                props.voteAnecdote(anecdote.id);
+                props.setNotification('You voted for: ' + anecdote.content);
+                setTimeout(() => {
+                  props.setNotification(null);
+                }, 5000);
+              }}
+            >
+              vote
+            </button>
           </div>
-        ))}
+        </div>
+      ))}
     </div>
   );
 };
 
+const anecdotesToShow = ({ anecdotes, filter }) => {
+  const f = filter.text;
+  return anecdotes
+    .sort((a, b) => b.votes - a.votes)
+    .filter(i => !f || i.content.toLowerCase().includes(f.toLowerCase()));
+};
+
 const mapStateToProps = state => {
   return {
-    anecdotes: state.anecdotes,
-    filter: state.filter
+    anecdotes: anecdotesToShow(state)
   };
 };
 
