@@ -1,10 +1,11 @@
 import React from 'react';
 import { voteAnecdote } from '../reducers/anecdoteReducer';
 import { setNotification } from '../reducers/notificationReducer';
+import { connect } from 'react-redux';
 
 const AnecdoteList = props => {
-  const anecdotes = props.store.getState().anecdotes;
-  const filter = props.store.getState().filter.text;
+  const anecdotes = props.anecdotes;
+  const filter = props.filter.text;
 
   return (
     <div>
@@ -20,12 +21,10 @@ const AnecdoteList = props => {
               has {anecdote.votes}
               <button
                 onClick={() => {
-                  props.store.dispatch(voteAnecdote(anecdote.id));
-                  props.store.dispatch(
-                    setNotification('You voted for: ' + anecdote.content)
-                  );
+                  props.voteAnecdote(anecdote.id);
+                  props.setNotification('You voted for: ' + anecdote.content);
                   setTimeout(() => {
-                    props.store.dispatch(setNotification(null));
+                    props.setNotification(null);
                   }, 5000);
                 }}
               >
@@ -38,6 +37,15 @@ const AnecdoteList = props => {
   );
 };
 
-export default AnecdoteList;
+const mapStateToProps = state => {
+  return {
+    anecdotes: state.anecdotes,
+    filter: state.filter
+  };
+};
+
+export default connect(mapStateToProps, { voteAnecdote, setNotification })(
+  AnecdoteList
+);
 
 //i.content.filter(str => str.indexOf(filter) === -1)
