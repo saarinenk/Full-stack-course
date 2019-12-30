@@ -47,5 +47,3 @@ const mapStateToProps = state => {
 export default connect(mapStateToProps, { voteAnecdote, setNotification })(
   AnecdoteList
 );
-
-//i.content.filter(str => str.indexOf(filter) === -1)

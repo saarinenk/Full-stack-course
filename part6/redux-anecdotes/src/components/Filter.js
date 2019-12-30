@@ -1,12 +1,10 @@
 import React from 'react';
 import { setFilter } from '../reducers/filterReducer';
+import { connect } from 'react-redux';
 
 const Filter = props => {
   const handleChange = event => {
-    const filter = props.store.getState().filter;
-    props.store.dispatch(setFilter(event.target.value));
-    console.log(filter);
-    console.log('bedroom'.indexOf('jk') === -1);
+    props.setFilter(event.target.value);
   };
   const style = {
     marginBottom: 10
@@ -19,4 +17,10 @@ const Filter = props => {
   );
 };
 
-export default Filter;
+const mapStateToProps = state => {
+  return {
+    filter: state.filter
+  };
+};
+
+export default connect(mapStateToProps, { setFilter })(Filter);
