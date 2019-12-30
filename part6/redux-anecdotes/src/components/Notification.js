@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import { hideNotification } from '../reducers/notificationReducer';
+import React from 'react';
 
 const Notification = props => {
   const style = {
